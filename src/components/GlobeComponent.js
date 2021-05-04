@@ -7,7 +7,7 @@ import XLSX from 'xlsx';
 
 function GlobeComponent() {
     const [places, setPlaces] = useState([]);
-
+    const globeEl =useRef()
     useEffect(() => {
         fetch("/datasets/worldcities.xlsx",{
             credentials: 'same-origin'
@@ -18,19 +18,26 @@ function GlobeComponent() {
                 const arcs=wb.Sheets["Sheet1"];
                 const wc_data = XLSX.utils.sheet_to_json(wc, {header:1});
                 const arcs_data= XLSX.utils.sheet_to_json(arcs, {header:1});
+                var lon=[]
+                var lat=[]
+                var pop=[]
+                var iso=[]
+                var cities=[]
+                var countries=[]
                 var place=[]
                 wc_data.map(data=>{
                     lon.push(data[2]);
                     lat.push(data[3]);
                     pop.push(data[9]);
-                    places.push(data[0])
+                    cities.push(data[0])
 
 
                 })
                 lon.shift();
                 lat.shift();
                 pop.shift();
-                globeEl.current.labelData=place
+                cities.shift()
+
 
             });
     })
@@ -40,14 +47,7 @@ function GlobeComponent() {
 
         globeImageUrl={process.env.PUBLIC_URL+"/images/earth-dark.jpg"}
         backgroundImageUrl={process.env.PUBLIC_URL+"/images/night-sky.png"}
-        labelsData={places}
-        labelLat={d => d.properties.latitude}
-        labelLng={d => d.properties.longitude}
-        labelText={d => d.properties.name}
-        labelSize={d => Math.sqrt(d.properties.pop_max) * 4e-4}
-        labelDotRadius={d => Math.sqrt(d.properties.pop_max) * 4e-4}
-        labelColor={() => 'rgba(255, 165, 0, 0.75)'}
-        labelResolution={2}
+
         />;
 
     </>;

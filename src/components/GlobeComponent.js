@@ -2,7 +2,7 @@
 import  React,{useReducer,useRef,useEffect,useState} from "react";
 import Globe from 'react-globe.gl';
 import XLSX from 'xlsx';
-import {countries} from './datasets/countries'
+import {countries} from './countries'
 
 
 
@@ -42,7 +42,6 @@ function GlobeComponent() {
       if (state==="unloaded"){
         let res = await fetchData();
         if (res.success) {
-
           const wb = XLSX.read(res.data, { type: "array" });
                   const wc = wb.Sheets["worldcities"];
                   const arcs=wb.Sheets["Sheet1"];

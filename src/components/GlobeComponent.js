@@ -50,15 +50,15 @@ function GlobeComponent() {
                   var lon_=[]
                   var lat_=[]
                   var pop=[]
-                  var iso=[]
                   var cities=[]
-                  var countries=[]
                   var places_=[];
                   wc_data.map( data=>{
+
                       lon_.push(data[3]);
                       lat_.push(data[2]);
                       pop.push(data[9]);
-                      cities.push(data[0])
+                      cities.push(data[0]);
+                      return 1;
   
   
                   });
@@ -75,7 +75,7 @@ function GlobeComponent() {
                             }
                       )
                     }); 
-                    console.log(arcs_data);
+                    console.log(places);
                     var arc_start_lat=[];
                     var arc_start_lon=[];
                     var arc_end_lon=[];
@@ -97,6 +97,7 @@ function GlobeComponent() {
                         arc_start_lon.push(data[4]);
                         _currentTransaction=data[0];
                      }}
+                        return 1;
                    
   
                   });
@@ -122,7 +123,7 @@ function GlobeComponent() {
             }
      
     })();
-  }, []);
+  });
 
 const globeEl =useRef()
 

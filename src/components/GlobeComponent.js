@@ -1,5 +1,5 @@
 
-import {useReducer,useRef,useEffect,useState} from "react";
+import  React,{useReducer,useRef,useEffect,useState} from "react";
 import Globe from 'react-globe.gl';
 import XLSX from 'xlsx';
 import {countries} from './datasets/countries'

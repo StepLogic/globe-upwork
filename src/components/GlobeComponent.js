@@ -3,43 +3,53 @@ import datasets from "./datasets/world_population.csv"
 
 import * as d3 from "d3"
 import React, {useEffect, useRef, useState} from 'react';
+import XLSX from 'xlsx';
 
 function GlobeComponent() {
-    const globeEl = useRef();
-    const [popData, setPopData] = useState([]);
+    const [places, setPlaces] = useState([]);
 
     useEffect(() => {
-        // load data
-        fetch("./datasets/world_population.csv").then(res => res.text())
-            .then(csv => d3.csvParse(csv, ({ lat, lng, pop }) => ({ lat: +lat, lng: +lng, pop: +pop })))
-            .then(setPopData);
-    }, []);
+        fetch("/datasets/worldcities.xlsx",{
+            credentials: 'same-origin'
+        }).then(res =>res.arrayBuffer())
+            .then(ab => {
+                const wb = XLSX.read(ab, { type: "array" });
+                const wc = wb.Sheets["worldcities"];
+                const arcs=wb.Sheets["Sheet1"];
+                const wc_data = XLSX.utils.sheet_to_json(wc, {header:1});
+                const arcs_data= XLSX.utils.sheet_to_json(arcs, {header:1});
+                var place=[]
+                wc_data.map(data=>{
+                    lon.push(data[2]);
+                    lat.push(data[3]);
+                    pop.push(data[9]);
+                    places.push(data[0])
 
-    useEffect(() => {
-        // Auto-rotate
-        globeEl.current.controls().autoRotate = true;
-        globeEl.current.controls().autoRotateSpeed = 0.1;
-    }, []);
 
-    const weightColor = d3.scaleSequentialSqrt(d3.interpolateYlOrRd)
-        .domain([0, 1e7]);
+                })
+                lon.shift();
+                lat.shift();
+                pop.shift();
+                globeEl.current.labelData=place
+
+            });
+    })
 
     return <>
         <Globe
-        ref={globeEl}
-        globeImageUrl={process.env.PUBLIC_URL+"/images/earth-dark.jpg"}
-        bumpImageUrl={process.env.PUBLIC_URL+"/images/earth-topology.png"}
-        backgroundImageUrl={process.env.PUBLIC_URL+"/images/night-sky.png"}
 
-        hexBinPointsData={popData}
-        hexBinPointWeight="pop"
-        hexAltitude={d => d.sumWeight * 6e-8}
-        hexBinResolution={4}
-        hexTopColor={d => weightColor(d.sumWeight)}
-        hexSideColor={d => weightColor(d.sumWeight)}
-        hexBinMerge={true}
-        enablePointerInteraction={false}
-    />
+        globeImageUrl={process.env.PUBLIC_URL+"/images/earth-dark.jpg"}
+        backgroundImageUrl={process.env.PUBLIC_URL+"/images/night-sky.png"}
+        labelsData={places}
+        labelLat={d => d.properties.latitude}
+        labelLng={d => d.properties.longitude}
+        labelText={d => d.properties.name}
+        labelSize={d => Math.sqrt(d.properties.pop_max) * 4e-4}
+        labelDotRadius={d => Math.sqrt(d.properties.pop_max) * 4e-4}
+        labelColor={() => 'rgba(255, 165, 0, 0.75)'}
+        labelResolution={2}
+        />;
+
     </>;
 }
 

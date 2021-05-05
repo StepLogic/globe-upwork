@@ -140,10 +140,9 @@ return <>
     arcColor={() => "#9cff00"}
     arcsTransitionDuration={0}
     pointsData={places.slice(0,1000)}
-    pointColor={() => "#ffffff"}
-    pointAltitude={0.07}
+    pointColor={() => "#FFFF00"}
+    pointAltitude={0.01}
     pointRadius="size"
-    pointResolution={2}
     hexPolygonsData={countries.features}
     hexPolygonResolutio={3}
     hexPolygonMargin={0.7}

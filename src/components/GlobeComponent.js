@@ -19,7 +19,7 @@ function reducer(state, action) {
 
 function GlobeComponent() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const[places,setPlaces] = useState();
+  const[places,setPlaces] = useState([]);
   const[arcs,setArcs] = useState();
   const gData = [...Array(10).keys()].map(() => ({
     lat: (Math.random() - 0.5) * 180,
@@ -75,7 +75,7 @@ function GlobeComponent() {
                             }
                       )
                     }); 
-                    console.log(places);
+
                     var arc_start_lat=[];
                     var arc_start_lon=[];
                     var arc_end_lon=[];
@@ -144,7 +144,7 @@ return <>
     arcDashAnimateTime={4000}
     arcColor={() => "#9cff00"}
     arcsTransitionDuration={0}
-    pointsData={gData}
+    pointsData={places.slice(0,1000)}
     pointColor={() => "#ffffff"}
     pointAltitude={0.07}
     pointRadius="size"

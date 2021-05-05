@@ -21,12 +21,7 @@ function GlobeComponent() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const[places,setPlaces] = useState([]);
   const[arcs,setArcs] = useState();
-  const gData = [...Array(10).keys()].map(() => ({
-    lat: (Math.random() - 0.5) * 180,
-    lng: (Math.random() - 0.5) * 360,
-    size: Math.random(),
-    color: ['red', 'white', 'blue', 'green'][Math.round(Math.random() * 3)]
-  }));
+
   const fetchData = async () => {
     try {
       let response = await fetch("/datasets/worldcities.xlsx");

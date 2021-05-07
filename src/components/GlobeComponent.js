@@ -39,7 +39,7 @@ function GlobeComponent() {
         if (res.success) {
           const wb = XLSX.read(res.data, { type: "array" });
                   const wc = wb.Sheets["worldcities"];
-                  const arcs=wb.Sheets["Sheet1"];
+                  const arcs=wb.Sheets["transactions"];
                   const wc_data = XLSX.utils.sheet_to_json(wc, {header:1});
                   const arcs_data= XLSX.utils.sheet_to_json(arcs, {header:1});
                   var lon_=[]
@@ -48,13 +48,11 @@ function GlobeComponent() {
                   var cities=[]
                   var places_=[];
                   wc_data.map( data=>{
-
-                      lon_.push(data[3]);
-                      lat_.push(data[2]);
-                      pop.push(data[9]);
+                      lon_.push(data[2]);
+                      lat_.push(data[1]);
+                      pop.push("0.25");
                       cities.push(data[0]);
                       return 1;
-  
   
                   });
                   lon_.shift();
@@ -65,8 +63,9 @@ function GlobeComponent() {
                       places_.push({
                               lat:lat_[index],
                               lng:lon_[index],
-                              size: Math.sqrt(pop[index]) * 4e-4,
-                              
+                              size: pop[index],
+                              city:city
+
                             }
                       )
                     }); 
@@ -103,10 +102,11 @@ function GlobeComponent() {
                             startlng:arc_start_lon[index],
                             endlat:arc_end_lat[index],
                             endlng:arc_end_lon[index],
+                            label:start_city[index]+" to "+city
                           }
                     )
                   }); 
-                
+                    console.log(arcs_data)
                     setArcs(transaction);
                     setPlaces(places_);
                     dispatch({type:"load"});
@@ -135,13 +135,15 @@ return <>
     arcEndLng={d => +d.endlng}
     arcDashLength={0.25}
     arcDashGap={1}
+    arcLabel={d=>+d.label}
     arcDashInitialGap={() => Math.random()}
     arcDashAnimateTime={4000}
     arcColor={() => "#9cff00"}
     arcsTransitionDuration={0}
-    pointsData={places.slice(0,1000)}
+    pointsData={places.slice(0,20000)}
     pointColor={() => "#FFFF00"}
     pointAltitude={0.01}
+    pointLabel={"city"}
     pointRadius="size"
     hexPolygonsData={countries.features}
     hexPolygonResolutio={3}
